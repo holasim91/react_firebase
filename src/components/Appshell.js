@@ -1,5 +1,7 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import Link from "@material-ui/core/Link";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -14,32 +16,50 @@ const useStyles = makeStyles(theme => ({
     marginRight: "auto"
   }
 }));
-export default function Appshell() {
+export default function Appshell(props) {
   const classes = useStyles();
-  const [state, setState]=useState({toggle:false})
-  console.log('currentState:', state)
+  const [state, setState] = useState({ toggle: false });
   function handleDrawerToggle() {
-    console.log('clicked!')
-    return setState({toggle:true})
+    return setState({ toggle: true });
   }
-  function closeDrawer(){
-    return setState({toggle:false})
+  function closeDrawer() {
+    return setState({ toggle: false });
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <IconButton
-          className={classes.menuButton}
-          color="inherit"
-          onClick={handleDrawerToggle}
-        >
-          <MenuIcon />
-        </IconButton>
-      </AppBar>
-      <Drawer open={state.toggle} onClose={closeDrawer}>
-        <MenuItem onClick={closeDrawer} > Home</MenuItem>
-      </Drawer>
+    <div>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon />
+          </IconButton>
+        </AppBar>
+        <Drawer open={state.toggle} onClose={closeDrawer}>
+          <MenuItem onClick={closeDrawer}>
+            <Link component={RouterLink} to="/">
+              Home
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={closeDrawer}>
+            <Link component={RouterLink} to="/texts">
+              Text
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={closeDrawer}>
+            <Link component={RouterLink} to="/words">
+              Word
+            </Link>
+          </MenuItem>
+        </Drawer>
+      </div>
+
+      <div id="contents" style={{ margin: "auto", marginTop: "20px" }}>
+        {React.cloneElement(props.children)}
+      </div>
     </div>
   );
 }
